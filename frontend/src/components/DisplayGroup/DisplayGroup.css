@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #c3ecb2, #7ee8fa, #eec0c6);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    min-height: 100vh;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px #ffffff80;
+}
+
+button {
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button i {
+    margin-right: 8px;
+}
+
+/* Green button styles for Update and Generate PDF */
+.update-btn,
+.pdf-btn {
+    background: linear-gradient(55deg, #28a745, #4caf50);
+    color: white;
+}
+
+.update-btn:hover,
+.pdf-btn:hover {
+    background: linear-gradient(45deg, #66bb6a, #2e7d32);
+    transform: scale(1.05);
+}
+
+/* Red button styles for Delete */
+.delete-btn {
+    background: linear-gradient(45deg, #f44336, #ff6347);
+    color: white;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(45deg, #e57373, #d32f2f);
+    transform: scale(1.05);
+}
+
+/* Text input style */
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #020202;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="text"]:focus {
+    border-color: #ff9a9e;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    text-align: center;
+    padding: 15px;
+}
+
+thead {
+    background: linear-gradient(45deg, #89f7fe, #66a6ff);
+    color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+tbody tr:hover {
+    background: #ffe0e9;
+}
+
+img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.actions button {
+    margin: 0 5px;
+}
+/* Add this to DisplayGroup.css */
+
+table th, table td {
+    color: black;  /* Set text color to black */
+}

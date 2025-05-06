@@ -1,0 +1,78 @@
+/* Home.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+  }
+  
+  .home-container {
+    text-align: center;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .custom-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .custom-button:hover {
+    background-color: #c08884;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .custom-button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+  
+  .custom-button:focus {
+    outline: none;
+  }
+  
+  .custom-button:before {
+    content: '';
+    position: absolute;
+    background: linear-gradient(45deg, #ab8886, #af9d9b);
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50px;
+    z-index: -1;
+    transition: all 0.4s ease;
+  }
+  
+  .custom-button:hover:before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  /* Optional: Add some background gradient to the whole page */
+  body {
+    background: linear-gradient(135deg, #f5f7fa, #e0eafc);
+  }
+  

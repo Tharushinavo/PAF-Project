@@ -1,0 +1,97 @@
+/* UpdateGroup.css */
+
+.group-container {
+    padding: 30px;
+    max-width: 800px;
+    margin: auto;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .group-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .group-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .group-field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .group-field label {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .group-field input,
+  .group-field textarea {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #0b0b0b;
+    border-radius: 5px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  .group-field input:focus,
+  .group-field textarea:focus {
+    border-color: #66a6ff;
+  }
+  
+  .group-field img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .group-submit {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .group-submit button {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .group-submit button:hover {
+    background: linear-gradient(45deg, #388e3c, #66bb6a);
+    transform: scale(1.05);
+  }
+  
+  /* Add responsive design */
+  @media (max-width: 768px) {
+    .group-container {
+      padding: 15px;
+    }
+  
+    .group-title {
+      font-size: 2rem;
+    }
+  
+    .group-form {
+      gap: 15px;
+    }
+  
+    .group-submit button {
+      width: 100%;
+    }
+  }
+  

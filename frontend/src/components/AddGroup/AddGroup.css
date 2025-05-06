@@ -1,0 +1,105 @@
+/* Group container with gradient background */
+.group-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc); /* Beautiful gradient */
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2); /* Larger shadow for depth */
+  transition: transform 0.3s ease-in-out;
+}
+
+.group-container:hover {
+  transform: translateY(-10px); /* Hover effect to raise the container */
+}
+
+.group-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow for title */
+}
+
+.group-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.group-field {
+  margin-bottom: 20px;
+}
+
+.group-field label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.group-field input,
+.group-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #fff;
+  border-radius: 15px;
+  font-size: 16px;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.8); /* Slight opacity for background */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.group-field input:focus,
+.group-field textarea:focus {
+  border-color: #7c3aed;
+  box-shadow: 0px 0px 8px rgba(124, 58, 237, 0.7); /* Focus effect with purple */
+}
+
+.group-submit {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.group-submit button {
+  background: linear-gradient(45deg, #7c3aed, #5b21b6); /* Gradient button background */
+  color: white;
+  padding: 14px 35px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15); /* Subtle shadow for button */
+}
+
+.group-submit button:hover {
+  background: linear-gradient(45deg, #5b21b6, #7c3aed);
+  transform: translateY(-5px); /* Hover effect to raise button */
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+.group-submit button:active {
+  transform: translateY(2px); /* Slight push effect on click */
+  box-shadow: none;
+}
+
+.group-submit button:focus {
+  outline: none;
+}
+
+/* Add a smooth transition for the form container */
+.group-form {
+  transition: transform 0.4s ease;
+}
+
+.group-form:hover {
+  transform: scale(1.02); /* Subtle scaling effect on form hover */
+}
