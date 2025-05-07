@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 public class UserModel {
 
-    // Getters and Setters
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

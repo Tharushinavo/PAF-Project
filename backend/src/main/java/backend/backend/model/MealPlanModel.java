@@ -16,7 +16,7 @@ public class MealPlanModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(nullable = false)
+
     private String dayOfWeek;
 
     private String breakfast;

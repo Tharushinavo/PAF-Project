@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface MealPlanRepository extends JpaRepository<MealPlanModel, Long> {
 
+    //
     /**
      * Find a meal plan by day of week
      * @param dayOfWeek day of week (e.g., "MONDAY", "TUESDAY")

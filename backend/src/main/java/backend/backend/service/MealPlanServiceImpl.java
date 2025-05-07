@@ -36,7 +36,7 @@ public class MealPlanServiceImpl implements MealPlanService {
         if (!mealPlanRepository.existsById(id)) {  // Fixed variable name
             throw new NoSuchElementException("Meal plan not found with ID " + id);
         }
-        mealPlanRepository.deleteById(id);  // Fixed variable name
+        mealPlanRepository.deleteById(id);
     }
 
     @Override

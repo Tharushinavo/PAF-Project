@@ -1,4 +1,4 @@
-package backend.backend.service;  // lowercase 'service' is standard
+package backend.backend.service;
 
 import backend.backend.model.MealPlanModel;
 import java.util.List;

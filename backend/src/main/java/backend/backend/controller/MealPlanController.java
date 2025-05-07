@@ -18,20 +18,7 @@ public class MealPlanController {
     @Autowired
     private MealPlanService mealPlanService;
 
-//    @PostMapping("/create")
-//    public ResponseEntity<Map<String, Object>> createMealPlan(@RequestBody MealPlanModel plan) {
-//        try {
-//            MealPlanModel createdPlan = mealPlanService.save(plan);
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("message", "Meal plan created successfully");
-//            response.put("data", createdPlan);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-//        } catch (Exception e) {
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("message", "Error creating meal plan: " + e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//        }
-//    }
+
 @PostMapping("/create")
 public ResponseEntity<?> createMealPlan(@RequestBody Map<String, Object> requestMap) {
     try {
