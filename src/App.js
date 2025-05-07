@@ -21,7 +21,7 @@ function App() {
         <Route path="/userProfile" element={<UserProfile />} />
         <Route path="/updateprofile/:id" element={<UpdateProfile />} />
         <Route path="/meal-planner" element={<WeekdayCards />} />
-        <Route path="/meal-planner/:day" element={<MealPlannerForm />} />
+        <Route path="/meal-planner/:dayOfWeek" element={<MealPlannerForm />} />
         <Route path="/all-meal-plans" element={<AllMealPlans />} />
         {/* <Route path="/user-profile" element={<UserProfile />} /> */}
 

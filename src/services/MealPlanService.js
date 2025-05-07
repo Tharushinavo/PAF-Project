@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/meal-plans';
+const API_URL = 'http://localhost:8080/api/mealplan';
 
 class MealPlanService {
-  // Get all meal plans
-  getAllMealPlans() {
-    return axios.get(API_URL)
+  static getAllMealPlans() {
+    return axios.get(`${API_URL}/all`)
       .then(response => response.data)
       .catch(error => {
         console.error('Error fetching meal plans:', error);
@@ -13,39 +12,70 @@ class MealPlanService {
       });
   }
 
-  // Get a single meal plan by ID
-  getMealPlanById(id) {
-    return axios.get(`${API_URL}/${id}`)
+  static getMealPlanByDay(dayOfWeek) {
+    return axios.get(`${API_URL}/day/${dayOfWeek}`)
       .then(response => response.data)
       .catch(error => {
-        console.error(`Error fetching meal plan ${id}:`, error);
+        console.error(`Error fetching meal plan for ${dayOfWeek}:`, error);
         throw error;
       });
   }
 
-  // Create a new meal plan
-  createMealPlan(mealPlanData) {
-    return axios.post(API_URL, mealPlanData)
-      .then(response => response.data)
-      .catch(error => {
-        console.error('Error creating meal plan:', error);
-        throw error;
+  // static createMealPlan(mealPlanData) {
+  //   return axios.post(`${API_URL}/create`, {
+  //     dayOfWeek: mealPlanData.dayOfWeek,
+  //     breakfast: mealPlanData.breakfast,
+  //     snacks: mealPlanData.snacks,
+  //     lunch: mealPlanData.lunch,
+  //     dinner: mealPlanData.dinner
+  //   })
+  //   .then(response => response.data)
+  //   .catch(error => {
+  //     console.error('Error creating meal plan:', error);
+  //     throw error;
+  //   });
+  // }
+  static async createMealPlan(mealPlanData) {
+    try {
+      const payload = {
+        dayOfWeek: mealPlanData.dayOfWeek?.toUpperCase(),
+        breakfast: mealPlanData.breakfast || "Not specified",
+        lunch: mealPlanData.lunch || "Not specified",
+        dinner: mealPlanData.dinner || "Not specified",
+        snacks: mealPlanData.snacks || "None"
+      };
+  
+      console.log("Sending payload:", payload);
+      
+      const response = await axios.post(`${API_URL}/create`, payload);
+      return response.data;
+    } catch (error) {
+      console.error("Creation failed:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        config: error.config
       });
+      throw new Error(error.response?.data?.message || "Failed to create meal plan");
+    }
   }
 
-  // Update an existing meal plan
-  updateMealPlan(id, mealPlanData) {
-    return axios.put(`${API_URL}/${id}`, mealPlanData)
-      .then(response => response.data)
-      .catch(error => {
-        console.error(`Error updating meal plan ${id}:`, error);
-        throw error;
-      });
+  static updateMealPlan(id, mealPlanData) {
+    return axios.put(`${API_URL}/${id}`, {
+      dayOfWeek: mealPlanData.dayOfWeek,
+      breakfast: mealPlanData.breakfast,
+      snacks: mealPlanData.snacks,
+      lunch: mealPlanData.lunch,
+      dinner: mealPlanData.dinner
+    })
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`Error updating meal plan ${id}:`, error);
+      throw error;
+    });
   }
 
-  // Delete a meal plan
-  deleteMealPlan(id) {
-    return axios.delete(`${API_URL}/${id}`)
+  static deleteMealPlan(id) {
+    return axios.delete(`${API_URL}/delete/${id}`)
       .then(response => response.data)
       .catch(error => {
         console.error(`Error deleting meal plan ${id}:`, error);
@@ -54,5 +84,4 @@ class MealPlanService {
   }
 }
 
-const mealPlanService = new MealPlanService();
-export default mealPlanService;
+export default MealPlanService;

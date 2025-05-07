@@ -1,28 +1,55 @@
 import { FaUserPlus, FaSignInAlt } from 'react-icons/fa';
+// If you use react-router-dom, use useNavigate for navigation
+// import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  // Uncomment if using react-router-dom
+  // const navigate = useNavigate();
+
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Welcome to Our App</h1>
+        <h1 style={styles.title}>Welcome to Testagram!</h1>
+        <p style={styles.subtitle}>
+          Plan your meals, eat healthy, and track your nutrition effortlessly.
+        </p>
         <div style={styles.buttonsContainer}>
-          <button 
-            onClick={() => (window.location.href = '/register')} 
-            style={{ ...styles.button, backgroundColor: '#FF7043' }} // Same color for Register and Login buttons
+          <button
+            // onClick={() => navigate('/register')}
+            onClick={() => (window.location.href = '/register')}
+            style={{ ...styles.button, ...styles.registerButton }}
+            aria-label="Register"
           >
             <FaUserPlus style={styles.icon} /> Register
           </button>
-          <button 
-            onClick={() => (window.location.href = '/login')} 
-            style={{ ...styles.button, backgroundColor: '#FF7043' }} // Warm orange for Login button
+          <button
+            // onClick={() => navigate('/login')}
+            onClick={() => (window.location.href = '/login')}
+            style={{ ...styles.button, ...styles.loginButton }}
+            aria-label="Login"
           >
             <FaSignInAlt style={styles.icon} /> Login
           </button>
         </div>
         <p style={styles.footerText}>
-          Already have an account? <a href="/login" style={styles.link}>Login here</a>
+          Already have an account?{' '}
+          <a href="/login" style={styles.link}>Login here</a>
         </p>
       </div>
+      {/* Inline CSS for hover/active effects */}
+      <style>{`
+        .home-btn:hover {
+          background-color: #ff5722 !important;
+          transform: translateY(-2px) scale(1.03);
+        }
+        .home-btn:active {
+          background-color: #e64a19 !important;
+        }
+        .home-link:hover {
+          color: #ff5722 !important;
+          text-decoration: underline;
+        }
+      `}</style>
     </div>
   );
 }
@@ -32,62 +59,87 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100vh',
-    background: 'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)',
+    minHeight: '100vh',
+    backgroundImage: 'url("https://images.unsplash.com/photo-1504674900247-0877df9cc836")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
     fontFamily: 'Arial, sans-serif',
+    padding: '20px',
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    padding: '40px',
-    borderRadius: '15px',
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.96)',
+    padding: '40px 30px',
+    borderRadius: '18px',
+    boxShadow: '0 10px 32px rgba(0, 0, 0, 0.18)',
     textAlign: 'center',
     minWidth: '320px',
+    maxWidth: '95vw',
+    width: '370px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center', // Ensures content is vertically centered
-    alignItems: 'center',     // Centers items horizontally
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: '2.5rem',
+    fontSize: '2.3rem',
     color: '#333',
-    marginBottom: '30px',
+    marginBottom: '10px',
     fontWeight: 'bold',
+    letterSpacing: 1,
+  },
+  subtitle: {
+    fontSize: '1.08rem',
+    color: '#444',
+    marginBottom: '28px',
+    fontWeight: 400,
+    lineHeight: 1.5,
   },
   buttonsContainer: {
     display: 'flex',
-    flexDirection: 'column',   // Stack the buttons vertically
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',             // Ensure buttons are centered properly
+    flexDirection: 'column',
+    width: '100%',
+    gap: '12px',
+    marginBottom: '12px',
   },
   button: {
-    padding: '12px 25px',  // Reduced padding to decrease button length
-    margin: '10px 0',
+    padding: '13px 0',
     fontSize: '16px',
     border: 'none',
     borderRadius: '8px',
     color: 'white',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-    width: '200px', // Set width to 200px for a shorter button
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    fontWeight: 600,
+    transition: 'background-color 0.2s, transform 0.2s',
+    outline: 'none',
+    marginBottom: '0',
+    marginTop: '0',
+  },
+  registerButton: {
+    backgroundColor: '#FF7043',
+    marginBottom: '5px',
+  },
+  loginButton: {
+    backgroundColor: '#FF7043',
   },
   icon: {
     marginRight: '10px',
     fontSize: '18px',
   },
   footerText: {
-    fontSize: '14px',
-    marginTop: '20px',
+    fontSize: '15px',
+    marginTop: '18px',
     color: '#333',
   },
   link: {
-    color: '#FF6347', // Tomato red for the "Login here" link
+    color: '#FF6347',
     textDecoration: 'none',
     fontWeight: 'bold',
+    transition: 'color 0.2s',
+    cursor: 'pointer',
   }
 };
 

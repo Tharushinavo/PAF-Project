@@ -3,11 +3,15 @@ import Navbar from "./Navbar";
 import { jsPDF } from "jspdf";
 import MealPlanService from '../../services/MealPlanService';
 
+// Use a beautiful, healthy meal flatlay background
+const MEAL_BG = "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=1200&q=80";
+
 const AllMealPlans = () => {
   const [mealPlans, setMealPlans] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     breakfast: "",
+    snacks:"",
     lunch: "",
     dinner: "",
     dayOfWeek: ""
@@ -42,9 +46,10 @@ const AllMealPlans = () => {
     setEditingId(plan.id);
     setEditFormData({
       breakfast: plan.breakfast || "",
+      snacks: plan.snacks || "",
       lunch: plan.lunch || "",
       dinner: plan.dinner || "",
-      dayOfWeek: plan.dayOfWeek
+      dayOfWeek: plan.dayOfWeek 
     });
   };
 
@@ -89,6 +94,9 @@ const AllMealPlans = () => {
       doc.text(`Breakfast: ${plan.breakfast || "Not specified"}`, 10, yPosition);
       yPosition += 10;
 
+      doc.text(`Snacks: ${plan.snacks || "Not specified"}`, 10, yPosition);
+      yPosition += 10;
+
       doc.text(`Lunch: ${plan.lunch || "Not specified"}`, 10, yPosition);
       yPosition += 10;
 
@@ -100,7 +108,8 @@ const AllMealPlans = () => {
   };
 
   return (
-    <div style={pageContainer}>
+    <div style={{ ...pageContainer, backgroundImage: `url('${MEAL_BG}')` }}>
+      <div style={overlayStyle} />
       <Navbar />
       <div style={contentContainer}>
         <h1 style={headingStyle}>All Meal Plans</h1>
@@ -119,6 +128,16 @@ const AllMealPlans = () => {
                       type="text"
                       name="breakfast"
                       value={editFormData.breakfast}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div style={formGroupStyle}>
+                    <label style={labelStyle}>Snacks:</label>
+                    <input
+                      type="text"
+                      name="snacks"
+                      value={editFormData.snacks}
                       onChange={handleInputChange}
                       style={inputStyle}
                     />
@@ -151,6 +170,7 @@ const AllMealPlans = () => {
               ) : (
                 <>
                   <div style={mealItemStyle}><strong>Breakfast:</strong> {plan.breakfast || "Not specified"}</div>
+                  <div style={mealItemStyle}><strong>Snacks:</strong> {plan.snacks || "Not specified"}</div>
                   <div style={mealItemStyle}><strong>Lunch:</strong> {plan.lunch || "Not specified"}</div>
                   <div style={mealItemStyle}><strong>Dinner:</strong> {plan.dinner || "Not specified"}</div>
                   <div style={buttonGroupStyle}>
@@ -168,18 +188,38 @@ const AllMealPlans = () => {
 };
 
 // Styles
-const pageContainer = { display: "flex" };
+const pageContainer = {
+  display: "flex",
+  minHeight: "100vh",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  width: "100vw",
+  position: "relative"
+};
+
+const overlayStyle = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: "rgba(0,0,0,0.35)",
+  zIndex: 0
+};
 
 const contentContainer = {
   marginLeft: "220px",
   padding: "20px",
-  flexGrow: 1
+  flexGrow: 1,
+  position: "relative",
+  zIndex: 1
 };
 
 const headingStyle = {
   fontSize: "2rem",
-  color: "#333",
-  marginBottom: "20px"
+  color: "#fff", // White color for strong contrast
+  marginBottom: "20px",
+  textShadow: "0 2px 8px rgba(0,0,0,0.4)" // Subtle shadow for readability
 };
 
 const gridStyle = {
@@ -193,7 +233,9 @@ const cardStyle = {
   padding: "20px",
   background: "#fff",
   borderRadius: "10px",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  position: "relative",
+  zIndex: 1
 };
 
 const mealItemStyle = {

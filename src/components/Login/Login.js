@@ -1,64 +1,103 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaSignInAlt, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { ClipLoader } from 'react-spinners';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [submitError, setSubmitError] = useState('');
+
+    // Live validation
+    const validate = () => {
+        const errs = {};
+        if (!email.trim()) errs.email = "Email is required";
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "Invalid email format";
+        if (!password) errs.password = "Password is required";
+        setErrors(errs);
+        return Object.keys(errs).length === 0;
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        const loginDetails = { email, password };
-
+        setSubmitError('');
+        if (!validate()) return;
+        setLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/user/login', loginDetails);
+            const response = await axios.post('http://localhost:8080/user/login', { email, password });
             if (response.data.id) {
                 localStorage.setItem('userId', response.data.id);
-                alert('Login Successful');
                 window.location.href = "/userProfile";
             } else {
-                alert('Invalid credentials');
+                setSubmitError('Invalid credentials');
             }
         } catch (err) {
-            alert('Invalid credentials');
-            window.location.href = "/login";
+            setSubmitError('Invalid credentials');
+        } finally {
+            setLoading(false);
         }
+    };
+
+    const pageStyle = {
+        minHeight: '100vh',
+        backgroundImage: 'url("https://images.unsplash.com/photo-1504674900247-0877df9cc836")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
     };
 
     const formStyle = {
         display: 'flex',
         flexDirection: 'column',
         maxWidth: '400px',
-        margin: '50px auto',
-        padding: '20px',
-        border: '1px solid #ccc',
-        borderRadius: '10px',
-        backgroundColor: '#f9f9f9',
+        width: '100%',
+        padding: '32px',
+        borderRadius: '14px',
+        backgroundColor: 'rgba(255, 255, 255, 0.97)',
         fontFamily: 'Arial, sans-serif',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        boxShadow: '0 8px 32px rgba(0,0,0,0.18)'
+    };
+
+    const inputContainerStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        border: '1.5px solid #ddd',
+        borderRadius: '6px',
+        margin: '10px 0',
+        padding: '10px',
+        backgroundColor: 'white'
     };
 
     const inputStyle = {
-        padding: '10px',
-        margin: '10px 0',
-        borderRadius: '5px',
-        border: '1px solid #ddd',
-        fontSize: '16px'
+        border: 'none',
+        outline: 'none',
+        fontSize: '16px',
+        flex: 1,
+        background: 'transparent'
     };
 
     const buttonStyle = {
-        padding: '10px 20px',
-        borderRadius: '5px',
-        backgroundColor: '#4CAF50',
+        padding: '12px 0',
+        borderRadius: '6px',
+        backgroundColor: '#FF5733',
         color: 'white',
         border: 'none',
-        fontSize: '16px',
-        cursor: 'pointer',
+        fontSize: '17px',
+        cursor: loading ? 'not-allowed' : 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        marginTop: '10px'
+        marginTop: '18px',
+        fontWeight: 600,
+        transition: 'background-color 0.3s'
     };
 
     const labelStyle = {
@@ -70,34 +109,72 @@ function Login() {
         color: '#333'
     };
 
+    const errorStyle = {
+        color: '#e53935',
+        fontSize: '0.97em',
+        margin: '2px 0 0 5px'
+    };
+
+    const togglePasswordStyle = {
+        position: 'absolute',
+        right: 10,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        background: 'none',
+        border: 'none',
+        color: '#888',
+        cursor: 'pointer'
+    };
+
     return (
-        <div>
-            <h1 style={{ textAlign: 'center', marginTop: '30px' }}>Login</h1>
-            <form onSubmit={onSubmit} style={formStyle}>
+        <div style={pageStyle}>
+            <form onSubmit={onSubmit} style={formStyle} autoComplete="off" noValidate>
+                <h1 style={{ textAlign: 'center', marginBottom: '18px', color: '#333', fontWeight: 700, letterSpacing: 1 }}>Login</h1>
+
                 <label htmlFor="email" style={labelStyle}><FaEnvelope /> Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    required
-                    style={inputStyle}
-                />
+                <div style={inputContainerStyle}>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        onChange={e => { setEmail(e.target.value); setErrors({ ...errors, email: '' }); setSubmitError(''); }}
+                        value={email}
+                        required
+                        style={inputStyle}
+                        placeholder="you@email.com"
+                        autoFocus
+                    />
+                </div>
+                {errors.email && <div style={errorStyle}>{errors.email}</div>}
 
                 <label htmlFor="password" style={labelStyle}><FaLock /> Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                    style={inputStyle}
-                />
+                <div style={inputContainerStyle}>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        onChange={e => { setPassword(e.target.value); setErrors({ ...errors, password: '' }); setSubmitError(''); }}
+                        value={password}
+                        required
+                        style={inputStyle}
+                        placeholder="Enter your password"
+                    />
+                    <button
+                        type="button"
+                        style={togglePasswordStyle}
+                        tabIndex={-1}
+                        onClick={() => setShowPassword(prev => !prev)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                </div>
+                {errors.password && <div style={errorStyle}>{errors.password}</div>}
 
-                <button type="submit" style={buttonStyle}>
-                    <FaSignInAlt /> Login
+                {submitError && <div style={errorStyle}>{submitError}</div>}
+
+                <button type="submit" style={buttonStyle} disabled={loading}>
+                    {loading ? <ClipLoader color="#fff" size={22} /> : <><FaSignInAlt /> Login</>}
                 </button>
             </form>
         </div>
