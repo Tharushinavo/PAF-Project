@@ -48,4 +48,9 @@ public class MealPlanServiceImpl implements MealPlanService {
     public List<MealPlanModel> getAll() {
         return mealPlanRepository.findAll();  // Fixed variable name
     }
+
+    @Override
+    public MealPlanModel getByDayOfWeek(String upperCase) {
+        return null;
+    }
 }

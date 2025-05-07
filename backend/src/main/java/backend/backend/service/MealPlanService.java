@@ -9,4 +9,6 @@ public interface MealPlanService {
     void delete(Long id);
     MealPlanModel getByDay(String day);
     List<MealPlanModel> getAll();
+
+    MealPlanModel getByDayOfWeek(String upperCase);
 }

@@ -18,20 +18,51 @@ public class MealPlanController {
     @Autowired
     private MealPlanService mealPlanService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createMealPlan(@RequestBody MealPlanModel plan) {
-        try {
-            MealPlanModel createdPlan = mealPlanService.save(plan);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Meal plan created successfully");
-            response.put("data", createdPlan);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Error creating meal plan: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//    @PostMapping("/create")
+//    public ResponseEntity<Map<String, Object>> createMealPlan(@RequestBody MealPlanModel plan) {
+//        try {
+//            MealPlanModel createdPlan = mealPlanService.save(plan);
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("message", "Meal plan created successfully");
+//            response.put("data", createdPlan);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//        } catch (Exception e) {
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("message", "Error creating meal plan: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//        }
+//    }
+@PostMapping("/create")
+public ResponseEntity<?> createMealPlan(@RequestBody Map<String, Object> requestMap) {
+    try {
+        // Convert and validate
+        MealPlanModel plan = new MealPlanModel();
+        plan.setDayOfWeek(((String) requestMap.get("dayOfWeek")).toUpperCase());
+        plan.setBreakfast((String) requestMap.get("breakfast"));
+        plan.setLunch((String) requestMap.get("lunch"));
+        plan.setDinner((String) requestMap.get("dinner"));
+        plan.setSnacks((String) requestMap.get("snacks"));
+
+        // Additional validation
+        if (plan.getDayOfWeek() == null) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Day of week is required")
+            );
         }
+
+        MealPlanModel savedPlan = mealPlanService.save(plan);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPlan);
+
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(
+                Map.of(
+                        "error", "Failed to create meal plan",
+                        "details", e.getMessage(),
+                        "receivedData", requestMap
+                )
+        );
     }
+}
 
     @GetMapping("/all")
     public ResponseEntity<List<MealPlanModel>> getAllMealPlans() {
@@ -39,13 +70,13 @@ public class MealPlanController {
     }
 
     @GetMapping("/day/{day}")
-    public ResponseEntity<?> getMealPlanByDay(@PathVariable String day) {
-        MealPlanModel plan = mealPlanService.getByDay(day.toUpperCase());
+    public ResponseEntity<?> getMealPlanByDayOfWeek(@PathVariable String dayOfWeek, @PathVariable String day) {
+        MealPlanModel plan = mealPlanService.getByDayOfWeek(dayOfWeek.toUpperCase());
         if (plan != null) {
             return ResponseEntity.ok(plan);
         } else {
             Map<String, String> response = new HashMap<>();
-            response.put("message", "Meal plan not found for day: " + day);
+            response.put("message", "Meal plan not found for day: " + dayOfWeek);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
