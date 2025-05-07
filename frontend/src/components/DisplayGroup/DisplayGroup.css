@@ -1,3 +1,4 @@
+/* Styles for the body and layout */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -27,11 +28,12 @@ h1 {
     text-shadow: 2px 2px #ffffff80;
 }
 
+/* Search and PDF Button Styles */
 button {
     border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 25px;
+    padding: 12px 25px; /* Increased padding */
+    font-size: 1.2rem; /* Increased font size */
+    border-radius: 30px; /* Larger border-radius */
     cursor: pointer;
     transition: 0.3s;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -44,20 +46,16 @@ button i {
     margin-right: 8px;
 }
 
-/* Green button styles for Update and Generate PDF */
-.update-btn,
-.pdf-btn {
+.update-btn, .pdf-btn {
     background: linear-gradient(55deg, #28a745, #4caf50);
     color: white;
 }
 
-.update-btn:hover,
-.pdf-btn:hover {
+.update-btn:hover, .pdf-btn:hover {
     background: linear-gradient(45deg, #66bb6a, #2e7d32);
     transform: scale(1.05);
 }
 
-/* Red button styles for Delete */
 .delete-btn {
     background: linear-gradient(45deg, #f44336, #ff6347);
     color: white;
@@ -68,14 +66,14 @@ button i {
     transform: scale(1.05);
 }
 
-/* Text input style */
+/* Search Input Styles */
 input[type="text"] {
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 20px;
+    width: 450px; /* Increased width */
+    padding: 15px; /* Increased padding */
+    margin-bottom: 25px; /* Increased margin */
     border: 2px solid #020202;
-    border-radius: 25px;
-    font-size: 1rem;
+    border-radius: 30px; /* Larger border-radius */
+    font-size: 1.2rem; /* Larger font size */
     outline: none;
     display: block;
     margin-left: auto;
@@ -86,44 +84,77 @@ input[type="text"]:focus {
     border-color: #ff9a9e;
 }
 
-/* Table styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
+/* Card Container */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/* Card Styles */
+.card {
+    width: 350px; /* Increased card width */
+    margin: 15px; /* Increased margin */
+    padding: 25px; /* Increased padding */
+    background-color: white;
     border-radius: 15px;
-    overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
     text-align: center;
-    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-thead {
-    background: linear-gradient(45deg, #89f7fe, #66a6ff);
-    color: #fff;
+.card:hover {
+    transform: scale(1.1); /* Increased scale */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-tbody tr:nth-child(even) {
-    background: #f9f9f9;
+.card-header {
+    margin-bottom: 20px;
 }
 
-tbody tr:hover {
-    background: #ffe0e9;
-}
-
-img {
+.card-image {
     border-radius: 50%;
+    width: 80px; /* Increased image size */
+    height: 80px;
     object-fit: cover;
 }
 
-.actions button {
-    margin: 0 5px;
+.card-title {
+    font-size: 1.5rem; /* Increased font size */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px; /* Reduced margin */
 }
-/* Add this to DisplayGroup.css */
 
-table th, table td {
-    color: black;  /* Set text color to black */
+.card-description {
+    font-size: 1.2rem; /* Increased font size */
+    color: #555;
+    margin-bottom: 20px; /* Increased margin */
+}
+
+.card-admin {
+    font-size: 1rem; /* Increased font size */
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%; /* Adjust card width for mobile */
+    }
+
+    input[type="text"] {
+        width: 85%; /* Adjust search bar width for mobile */
+    }
 }

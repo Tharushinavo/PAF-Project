@@ -5,7 +5,6 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import './DisplayGroup.css';
 
-
 function DisplayGroup() {
   const [community, setCommunity] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -74,7 +73,7 @@ function DisplayGroup() {
   );
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="container">
       <h1>COMMUNITY GROUPS</h1>
 
       <button className="pdf-btn" onClick={() => generatePdf(community)} style={{ marginBottom: '20px' }}>
@@ -86,50 +85,31 @@ function DisplayGroup() {
         placeholder="Search by ID or Name"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ marginBottom: '20px', padding: '25px', width: '1700px' }}
+        style={{ marginBottom: '60px', padding: '30px', width: '800px' }}
       />
 
-      <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th>Group Id</th>
-            <th>Group Image</th>
-            <th>Group Name</th>
-            <th>Group Description</th>
-            <th>Group Admin Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((group, index) => (
-            <tr key={index}>
-              <td>{group.groupId}</td>
-              <td>
-                <img
-                  src={`http://localhost:8080/uploads/${group.groupImage}`}
-                  alt={group.groupName}
-                  width="50"
-                  height="50"
-                />
-              </td>
-              <td>{group.groupName}</td>
-              <td>{group.groupDescription}</td>
-              <td>{group.groupAdminName}</td>
-              <td>
-                <button className="update-btn"
-                  onClick={() => UpdateNavigate(group.id)}
-                  style={{ marginRight: '10px' }}
-                >
-                  Update
-                </button>
-                <button className="delete-btn" onClick={() => deleteGroup(group.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="card-container">
+        {filteredData.map((group, index) => (
+          <div className="card" key={index}>
+            <div className="card-header">
+              <img
+                src={`http://localhost:8080/uploads/${group.groupImage}`}
+                alt={group.groupName}
+                className="card-image"
+              />
+            </div>
+            <div className="card-body">
+              <h3 className="card-title">{group.groupName}</h3>
+              <p className="card-description">{group.groupDescription}</p>
+              <p className="card-admin">Admin: {group.groupAdminName}</p>
+            </div>
+            <div className="card-footer">
+              <button className="update-btn" onClick={() => UpdateNavigate(group.id)}>Update</button>
+              <button className="delete-btn" onClick={() => deleteGroup(group.id)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
