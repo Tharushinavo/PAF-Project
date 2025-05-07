@@ -63,7 +63,7 @@ const MealPlannerForm = () => {
     setLoading(true);
 
     try {
-      // const requestData = { day: selectedDay, meals };
+   
       const requestData = {
         dayOfWeek: selectedDay,
         breakfast: meals.breakfast,

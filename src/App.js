@@ -23,7 +23,7 @@ function App() {
         <Route path="/meal-planner" element={<WeekdayCards />} />
         <Route path="/meal-planner/:dayOfWeek" element={<MealPlannerForm />} />
         <Route path="/all-meal-plans" element={<AllMealPlans />} />
-        {/* <Route path="/user-profile" element={<UserProfile />} /> */}
+        
 
       </Routes>
     </Router>

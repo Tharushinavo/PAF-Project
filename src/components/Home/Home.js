@@ -3,7 +3,7 @@ import { FaUserPlus, FaSignInAlt } from 'react-icons/fa';
 // import { useNavigate } from 'react-router-dom';
 
 function Home() {
-  // Uncomment if using react-router-dom
+  
   // const navigate = useNavigate();
 
   return (

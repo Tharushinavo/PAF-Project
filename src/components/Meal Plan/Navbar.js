@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaUtensils, FaListAlt, FaUserCircle } from "react-icons/fa"; // Imported icons
-
+import { FaUtensils, FaListAlt, FaUserCircle } from "react-icons/fa"; 
 const Navbar = () => {
   return (
     <nav style={navStyle}>

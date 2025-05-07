@@ -14,7 +14,7 @@ const MealPlannerPage = () => {
     dayOfWeek: ""
   });
 
-  // Fetch meal plan from the backend when the component loads
+  
   useEffect(() => {
     const fetchMealPlan = async () => {
       try {

@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import { jsPDF } from "jspdf";
 import MealPlanService from '../../services/MealPlanService';
 
-// Use a beautiful, healthy meal flatlay background
+
 const MEAL_BG = "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=1200&q=80";
 
 const AllMealPlans = () => {

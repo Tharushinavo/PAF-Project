@@ -53,7 +53,7 @@ function Register() {
         }
     };
 
-    // Styles
+   
     const containerStyle = {
         display: 'flex',
         justifyContent: 'center',

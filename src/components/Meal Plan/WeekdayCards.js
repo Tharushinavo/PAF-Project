@@ -11,7 +11,7 @@ import {
   Leaf,
 } from "lucide-react";
 
-// 1. Use a high-quality, free food background from Unsplash
+
 const FOOD_BG =
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80";
 

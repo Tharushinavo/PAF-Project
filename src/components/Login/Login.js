@@ -11,7 +11,7 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
 
-    // Live validation
+    
     const validate = () => {
         const errs = {};
         if (!email.trim()) errs.email = "Email is required";

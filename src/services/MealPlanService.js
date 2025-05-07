@@ -21,20 +21,7 @@ class MealPlanService {
       });
   }
 
-  // static createMealPlan(mealPlanData) {
-  //   return axios.post(`${API_URL}/create`, {
-  //     dayOfWeek: mealPlanData.dayOfWeek,
-  //     breakfast: mealPlanData.breakfast,
-  //     snacks: mealPlanData.snacks,
-  //     lunch: mealPlanData.lunch,
-  //     dinner: mealPlanData.dinner
-  //   })
-  //   .then(response => response.data)
-  //   .catch(error => {
-  //     console.error('Error creating meal plan:', error);
-  //     throw error;
-  //   });
-  // }
+ 
   static async createMealPlan(mealPlanData) {
     try {
       const payload = {
@@ -75,7 +62,7 @@ class MealPlanService {
   }
 
   static deleteMealPlan(id) {
-    return axios.delete(`${API_URL}/delete/${id}`)
+    return axios.delete(`${API_URL}/delete/${id}`) // delete
       .then(response => response.data)
       .catch(error => {
         console.error(`Error deleting meal plan ${id}:`, error);
