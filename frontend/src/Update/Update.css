@@ -1,0 +1,28 @@
+/* Update.css */
+form {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  form label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+  }
+  
+  form input,
+  form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  form button {
+    display: inline-block;
+    margin-top: 20px;
+  }
+  

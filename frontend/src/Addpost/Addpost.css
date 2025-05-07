@@ -1,0 +1,27 @@
+
+form {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  form label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 600;
+  }
+  
+  form input[type="text"],
+  form input[type="file"],
+  form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  form button {
+    margin-top: 20px;
+  }
+  

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Addpost.css';
 
-function AddPost() {
+function Addpost() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     id: '',
     title: '',
@@ -9,122 +13,86 @@ function AddPost() {
     tags: '',
     location: '',
     rating: '',
-    image: null // For image upload
+    restaurantDescription: '',
+    foodQuality: '',
+    service: '',
+    atmosphere: '',
+    image: null
   });
 
-  // Handle form data change
-  const onInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle image file change
   const handleImageChange = (e) => {
-    setFormData({
-      ...formData,
-      image: e.target.files[0] // Store the selected file
-    });
+    setFormData(prev => ({ ...prev, image: e.target.files[0] }));
   };
 
-  // Handle form submission
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // First, upload the image if it's provided
       let imageName = '';
       if (formData.image) {
-        const formDataImage = new FormData();
-        formDataImage.append('file', formData.image);
-
-        const imageResponse = await axios.post('http://localhost:8080/post/image', formDataImage, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+        const imgData = new FormData();
+        imgData.append('file', formData.image);
+        const imgRes = await axios.post(
+          'http://localhost:8080/post/image',
+          imgData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           }
-        });
-
-        imageName = imageResponse.data; // Assuming the response contains the image name or URL
+        );
+        imageName = imgRes.data;
       }
 
-      // Now, create the post with or without the image URL
-      const postData = {
-        ...formData,
-        postImage: imageName // Attach the image name (if uploaded)
+      const payload = {
+        id: formData.id,
+        title: formData.title,
+        content: formData.content,
+        tags: formData.tags,
+        location: formData.location,
+        rating: formData.rating,
+        restaurantDescription: formData.restaurantDescription,
+        foodQuality: formData.foodQuality,
+        service: formData.service,
+        atmosphere: formData.atmosphere,
+        imageUrl: imageName
       };
 
-      const response = await axios.post('http://localhost:8080/api/posts', postData);
-      console.log('Post submitted:', response.data);
+      await axios.post('http://localhost:8080/api/posts', payload);
       alert('Post submitted successfully!');
-      window.location.reload(); // Reload the page to reset the form
-    } catch (error) {
-      console.error('Error submitting post:', error);
-      alert('Error submitting the post. Please try again.');
+      navigate('/display');
+    } catch (err) {
+      console.error('Error submitting post:', err);
+      alert('Error submitting the post. Please check the console and try again.');
     }
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
       <h2>Add Post</h2>
-      <form id="postform" onSubmit={onSubmit}>
-        <label htmlFor="id">Post ID</label><br />
-        <input
-          type="text"
-          id="id"
-          name="id"
-          value={formData.id}
-          onChange={onInputChange}
-          required
-        /><br />
+      <form onSubmit={handleSubmit}>
+        <label>Post ID</label><br />
+        <input name="id" value={formData.id} onChange={handleChange} required /><br />
 
-        <label htmlFor="title">Title</label><br />
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={onInputChange}
-          required
-        /><br />
+        <label>Title</label><br />
+        <input name="title" value={formData.title} onChange={handleChange} required /><br />
 
-        <label htmlFor="content">Content</label><br />
-        <textarea
-          id="content"
-          name="content"
-          value={formData.content}
-          onChange={onInputChange}
-        /><br />
+        <label>Content</label><br />
+        <textarea name="content" value={formData.content} onChange={handleChange} required /><br />
 
-        <label htmlFor="tags">Tags</label><br />
-        <input
-          type="text"
-          id="tags"
-          name="tags"
-          value={formData.tags}
-          onChange={onInputChange}
-          required
-        /><br />
+        <label>Tags</label><br />
+        <input name="tags" value={formData.tags} onChange={handleChange} /><br />
 
-        <label htmlFor="location">Location</label><br />
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={formData.location}
-          onChange={onInputChange}
-          required
-        /><br />
+        <label>Location</label><br />
+        <input name="location" value={formData.location} onChange={handleChange} /><br />
 
-        <label htmlFor="rating">Rating</label><br />
-        <select
-          id="rating"
-          name="rating"
-          value={formData.rating}
-          onChange={onInputChange}
-          required
-        >
+        <label>Rating</label><br />
+        <select name="rating" value={formData.rating} onChange={handleChange} required>
           <option value="" disabled>Select rating</option>
           <option value="1 out of 5">1 out of 5</option>
           <option value="2 out of 5">2 out of 5</option>
@@ -133,13 +101,20 @@ function AddPost() {
           <option value="5 out of 5">5 out of 5</option>
         </select><br />
 
-        <label htmlFor="image">Upload Image</label><br />
-        <input
-          type="file"
-          id="image"
-          name="image"
-          onChange={handleImageChange}
-        /><br />
+        <label>Restaurant Description</label><br />
+        <input name="restaurantDescription" value={formData.restaurantDescription} onChange={handleChange} required /><br />
+
+        <label>Food Quality</label><br />
+        <input name="foodQuality" value={formData.foodQuality} onChange={handleChange} required /><br />
+
+        <label>Service</label><br />
+        <input name="service" value={formData.service} onChange={handleChange} required /><br />
+
+        <label>Atmosphere</label><br />
+        <input name="atmosphere" value={formData.atmosphere} onChange={handleChange} required /><br />
+
+        <label>Upload Image</label><br />
+        <input type="file" name="image" onChange={handleImageChange} /><br /><br />
 
         <button type="submit">Submit Post</button>
       </form>
@@ -147,6 +122,14 @@ function AddPost() {
   );
 }
 
-export default AddPost;
+export default Addpost;
+
+
+
+
+
+
+
+
 
 
