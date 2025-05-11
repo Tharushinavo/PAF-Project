@@ -3,67 +3,54 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Addpost.css';
 
-function Addpost() {
+const AddPost = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    id: '',
     title: '',
     content: '',
-    tags: '',
     location: '',
     rating: '',
-    restaurantDescription: '',
-    foodQuality: '',
+    food_quality: '',
     service: '',
     atmosphere: '',
-    image: null
+    restaurant_description: '',
+    tags: '',
+    image: null,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e) => {
-    setFormData(prev => ({ ...prev, image: e.target.files[0] }));
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      setFormData({ ...formData, image: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      let imageName = '';
+      const formDataToSend = new FormData();
+
+      // Append the image file
       if (formData.image) {
-        const imgData = new FormData();
-        imgData.append('file', formData.image);
-        const imgRes = await axios.post(
-          'http://localhost:8080/post/image',
-          imgData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }
-        );
-        imageName = imgRes.data;
+        formDataToSend.append('image', formData.image);
       }
 
-      const payload = {
-        id: formData.id,
-        title: formData.title,
-        content: formData.content,
-        tags: formData.tags,
-        location: formData.location,
-        rating: formData.rating,
-        restaurantDescription: formData.restaurantDescription,
-        foodQuality: formData.foodQuality,
-        service: formData.service,
-        atmosphere: formData.atmosphere,
-        imageUrl: imageName
-      };
+      // Create a copy of formData and remove the image field
+      const { image, ...postData } = formData;
 
-      await axios.post('http://localhost:8080/api/posts', payload);
+      // Convert the post data to JSON string and append
+      formDataToSend.append('post', JSON.stringify(postData));
+
+      // Send the multipart/form-data request
+      await axios.post('http://localhost:8080/api/posts', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       alert('Post submitted successfully!');
       navigate('/display');
     } catch (err) {
@@ -73,56 +60,50 @@ function Addpost() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
-      <h2>Add Post</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Post ID</label><br />
-        <input name="id" value={formData.id} onChange={handleChange} required /><br />
+    <form onSubmit={handleSubmit}>
+      <label>Title</label>
+      <input type="text" name="title" value={formData.title} onChange={handleChange} required />
 
-        <label>Title</label><br />
-        <input name="title" value={formData.title} onChange={handleChange} required /><br />
+      <label>Content</label>
+      <input type="text" name="content" value={formData.content} onChange={handleChange} required />
 
-        <label>Content</label><br />
-        <textarea name="content" value={formData.content} onChange={handleChange} required /><br />
+      <label>Location</label>
+      <input type="text" name="location" value={formData.location} onChange={handleChange} required />
 
-        <label>Tags</label><br />
-        <input name="tags" value={formData.tags} onChange={handleChange} /><br />
+      <label>Rating</label>
+      <select name="rating" value={formData.rating} onChange={handleChange} required>
+        <option value="">Select Rating</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
 
-        <label>Location</label><br />
-        <input name="location" value={formData.location} onChange={handleChange} /><br />
+      <label>Food Quality</label>
+      <input type="text" name="food_quality" value={formData.food_quality} onChange={handleChange} required />
 
-        <label>Rating</label><br />
-        <select name="rating" value={formData.rating} onChange={handleChange} required>
-          <option value="" disabled>Select rating</option>
-          <option value="1 out of 5">1 out of 5</option>
-          <option value="2 out of 5">2 out of 5</option>
-          <option value="3 out of 5">3 out of 5</option>
-          <option value="4 out of 5">4 out of 5</option>
-          <option value="5 out of 5">5 out of 5</option>
-        </select><br />
+      <label>Service</label>
+      <input type="text" name="service" value={formData.service} onChange={handleChange} required />
 
-        <label>Restaurant Description</label><br />
-        <input name="restaurantDescription" value={formData.restaurantDescription} onChange={handleChange} required /><br />
+      <label>Atmosphere</label>
+      <input type="text" name="atmosphere" value={formData.atmosphere} onChange={handleChange} required />
 
-        <label>Food Quality</label><br />
-        <input name="foodQuality" value={formData.foodQuality} onChange={handleChange} required /><br />
+      <label>Restaurant Description</label>
+      <input type="text" name="restaurant_description" value={formData.restaurant_description} onChange={handleChange} required />
 
-        <label>Service</label><br />
-        <input name="service" value={formData.service} onChange={handleChange} required /><br />
+      <label>Tags</label>
+      <input type="text" name="tags" value={formData.tags} onChange={handleChange} required />
 
-        <label>Atmosphere</label><br />
-        <input name="atmosphere" value={formData.atmosphere} onChange={handleChange} required /><br />
+      <label>Image</label>
+      <input type="file" name="image" onChange={handleChange} accept="image/*" required />
 
-        <label>Upload Image</label><br />
-        <input type="file" name="image" onChange={handleImageChange} /><br /><br />
-
-        <button type="submit">Submit Post</button>
-      </form>
-    </div>
+      <button type="submit">Submit</button>
+    </form>
   );
-}
+};
 
-export default Addpost;
+export default AddPost;
 
 
 
