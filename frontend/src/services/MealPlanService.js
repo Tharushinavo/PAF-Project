@@ -21,7 +21,6 @@ class MealPlanService {
       });
   }
 
- 
   static async createMealPlan(mealPlanData) {
     try {
       const payload = {
@@ -46,8 +45,10 @@ class MealPlanService {
     }
   }
 
-  static updateMealPlan(id, mealPlanData) {
-    return axios.put(`${API_URL}/${id}`, {
+  static updateMealPlan(dayOfWeek, mealPlanData) {
+    const formattedDay = dayOfWeek.replace(/\s+/g, '').toLowerCase();
+    
+    return axios.put(`${API_URL}/update/${formattedDay}`, {
       dayOfWeek: mealPlanData.dayOfWeek,
       breakfast: mealPlanData.breakfast,
       snacks: mealPlanData.snacks,
@@ -56,13 +57,17 @@ class MealPlanService {
     })
     .then(response => response.data)
     .catch(error => {
-      console.error(`Error updating meal plan ${id}:`, error);
+      console.error(`Error updating meal plan for ${dayOfWeek}:`, error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      }
       throw error;
     });
   }
 
   static deleteMealPlan(id) {
-    return axios.delete(`${API_URL}/delete/${id}`) // delete
+    return axios.delete(`${API_URL}/delete/${id}`)
       .then(response => response.data)
       .catch(error => {
         console.error(`Error deleting meal plan ${id}:`, error);

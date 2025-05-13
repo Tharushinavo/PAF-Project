@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserEdit, FaTrashAlt, FaUtensils } from 'react-icons/fa';
 
-//
+
 function UserProfile() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -44,48 +44,56 @@ function UserProfile() {
                 await axios.delete(`http://localhost:8080/user/${userId}`);
                 alert('Account deleted successfully');
                 localStorage.removeItem('userId');
-                navigate('/register');
+                navigate('/');
             } catch (error) {
                 alert('Error deleting account');
             }
         }
     };
 
-    if (loading) return <p style={{ color: '#fff' }}>Loading...</p>;
-    if (error) return <p style={{ color: '#fff' }}>{error}</p>;
+    if (loading) return <p style={{ color: '#fff', textAlign: 'center' }}>Loading...</p>;
+    if (error) return <p style={{ color: '#fff', textAlign: 'center' }}>{error}</p>;
 
     return (
-        <div style={outerContainerStyle}>
-            <div style={overlayStyle} />
-            <div style={containerStyle}>
-                <img
-                    src="https://www.w3schools.com/howto/img_avatar.png"
-                    alt="User Avatar"
-                    style={avatarStyle}
-                />
-                <h2 style={headingStyle}>Welcome, {user.full_name.split(" ")[0]}!</h2>
+        <div style={fullPageStyle}>
+            <div style={outerContainerStyle}>
+                <div style={overlayStyle} />
+                <div style={containerStyle}>
+                    <img
+                        src="https://www.w3schools.com/howto/img_avatar.png"
+                        alt="User Avatar"
+                        style={avatarStyle}
+                    />
+                    <h2 style={headingStyle}>Welcome, {user.full_name.split(" ")[0]}!</h2>
 
-                <div style={infoCardStyle}>
-                    <p style={infoTextStyle}><strong>Full Name:</strong> {user.full_name}</p>
-                    <p style={infoTextStyle}><strong>Email:</strong> {user.email}</p>
-                    <p style={infoTextStyle}><strong>Phone:</strong> {user.phone}</p>
-                </div>
+                    <div style={infoCardStyle}>
+                        <p style={infoTextStyle}><strong>Full Name:</strong> {user.full_name}</p>
+                        <p style={infoTextStyle}><strong>Email:</strong> {user.email}</p>
+                        <p style={infoTextStyle}><strong>Phone:</strong> {user.phone}</p>
+                    </div>
 
-                <div style={buttonGroupStyle}>
-                    <button style={{ ...btnStyle, ...btnUpdateStyle }} onClick={() => UpdateNavigate(user.id)}>
-                        <FaUserEdit /> Edit Profile
-                    </button>
-                    <button style={{ ...btnStyle, ...btnMealStyle }} onClick={goToMealPlan}>
-                        <FaUtensils /> Meal Plans
-                    </button>
-                    <button style={{ ...btnStyle, ...btnDeleteStyle }} onClick={deleteAccount}>
-                        <FaTrashAlt /> Delete Account
-                    </button>
+                    <div style={buttonGroupStyle}>
+                        <button style={{ ...btnStyle, ...btnUpdateStyle }} onClick={() => UpdateNavigate(user.id)}>
+                            <FaUserEdit /> Edit Profile
+                        </button>
+                        <button style={{ ...btnStyle, ...btnMealStyle }} onClick={goToMealPlan}>
+                            <FaUtensils /> Meal Plans
+                        </button>
+                        <button style={{ ...btnStyle, ...btnDeleteStyle }} onClick={deleteAccount}>
+                            <FaTrashAlt /> Delete Account
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+
+// Full page style without navbar margin
+const fullPageStyle = {
+    width: '100%',
+    minHeight: '100vh',
+};
 
 const outerContainerStyle = {
     backgroundImage: 'url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1470&q=80")',

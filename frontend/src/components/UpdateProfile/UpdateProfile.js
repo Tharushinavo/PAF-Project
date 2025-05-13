@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaUserEdit, FaEnvelope, FaLock, FaPhone, FaSave, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUserEdit, FaEnvelope, FaLock, FaPhone, FaSave, FaEye, FaEyeSlash, FaCheckCircle } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
 
-//
 function UpdateProfile() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -12,6 +11,7 @@ function UpdateProfile() {
     const [showPassword, setShowPassword] = useState(false);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     
     const [formData, setFormData] = useState({
         full_name: '',
@@ -27,7 +27,7 @@ function UpdateProfile() {
                 setFormData({
                     full_name: data.full_name || '',
                     email: data.email || '',
-                    password: '', // Don't display existing password
+                    password: data.password ||  '', // Don't display existing password
                     phone: data.phone || '',
                 });
             } catch (error) {
@@ -47,7 +47,7 @@ function UpdateProfile() {
 
         if (!formData.full_name.trim()) errors.full_name = 'Full name is required';
         if (!emailRegex.test(formData.email)) errors.email = 'Invalid email format';
-        if (formData.password.length < 6) errors.password = 'Password must be at least 6 characters';
+        if (formData.password && formData.password.length < 6) errors.password = 'Password must be at least 6 characters';
         if (!phoneRegex.test(formData.phone)) errors.phone = 'Invalid phone number (10 digits required)';
 
         setFormErrors(errors);
@@ -67,12 +67,25 @@ function UpdateProfile() {
 
         setIsSubmitting(true);
         try {
-            await axios.put(`http://localhost:8080/user/${id}`, formData);
-            navigate('/userProfile', { state: { success: 'Profile updated successfully!' } });
+            const dataToSubmit = {...formData};
+            // Only include password if it's not empty
+            if (!dataToSubmit.password) {
+                delete dataToSubmit.password;
+            }
+            
+            await axios.put(`http://localhost:8080/user/${id}`, dataToSubmit);
+            
+            // Show success message
+            setShowSuccess(true);
+            
+            // Navigate back after delay
+            setTimeout(() => {
+                navigate('/userProfile');
+            }, 2000);
+            
         } catch (error) {
             console.error('Update error:', error);
             setFormErrors({ submit: error.response?.data?.message || 'Update failed. Please try again.' });
-        } finally {
             setIsSubmitting(false);
         }
     };
@@ -88,98 +101,108 @@ function UpdateProfile() {
     return (
         <div className="profile-update-container">
             <div className="update-form-card">
-                <h1><FaUserEdit /> Update Profile</h1>
-                
-                {formErrors.fetch && (
-                    <div className="error-banner">{formErrors.fetch}</div>
-                )}
-
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="fullName"><FaUserEdit /> Full Name</label>
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="full_name"
-                            value={formData.full_name}
-                            onChange={handleInputChange}
-                            className={formErrors.full_name ? 'input-error' : ''}
-                        />
-                        {formErrors.full_name && 
-                            <span className="error-message">{formErrors.full_name}</span>}
+                {showSuccess ? (
+                    <div className="success-message">
+                        <FaCheckCircle size={50} />
+                        <h2>Profile Updated Successfully!</h2>
+                        <p>Redirecting to your profile...</p>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="email"><FaEnvelope /> Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className={formErrors.email ? 'input-error' : ''}
-                        />
-                        {formErrors.email && 
-                            <span className="error-message">{formErrors.email}</span>}
-                    </div>
-
-                    <div className="form-group password-group">
-                        <label htmlFor="password"><FaLock /> Password</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                id="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                className={formErrors.password ? 'input-error' : ''}
-                                placeholder="Enter new password"
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                            >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </button>
-                        </div>
-                        {formErrors.password && 
-                            <span className="error-message">{formErrors.password}</span>}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="phone"><FaPhone /> Phone</label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            className={formErrors.phone ? 'input-error' : ''}
-                            placeholder="1234567890"
-                        />
-                        {formErrors.phone && 
-                            <span className="error-message">{formErrors.phone}</span>}
-                    </div>
-
-                    {formErrors.submit && 
-                        <div className="error-message submit-error">{formErrors.submit}</div>}
-
-                    <button 
-                        type="submit" 
-                        className="submit-btn"
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? (
-                            <ClipLoader color="#fff" size={20} />
-                        ) : (
-                            <>
-                                <FaSave /> Update Profile
-                            </>
+                ) : (
+                    <>
+                        <h1><FaUserEdit /> Update Profile</h1>
+                        
+                        {formErrors.fetch && (
+                            <div className="error-banner">{formErrors.fetch}</div>
                         )}
-                    </button>
-                </form>
+
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="fullName"><FaUserEdit /> Full Name</label>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    name="full_name"
+                                    value={formData.full_name}
+                                    onChange={handleInputChange}
+                                    className={formErrors.full_name ? 'input-error' : ''}
+                                />
+                                {formErrors.full_name && 
+                                    <span className="error-message">{formErrors.full_name}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="email"><FaEnvelope /> Email</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    className={formErrors.email ? 'input-error' : ''}
+                                />
+                                {formErrors.email && 
+                                    <span className="error-message">{formErrors.email}</span>}
+                            </div>
+
+                            <div className="form-group password-group">
+                                <label htmlFor="password"><FaLock /> Password</label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        className={formErrors.password ? 'input-error' : ''}
+                                        placeholder="Leave blank to keep current password"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
+                                {formErrors.password && 
+                                    <span className="error-message">{formErrors.password}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="phone"><FaPhone /> Phone</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    className={formErrors.phone ? 'input-error' : ''}
+                                    placeholder="1234567890"
+                                />
+                                {formErrors.phone && 
+                                    <span className="error-message">{formErrors.phone}</span>}
+                            </div>
+
+                            {formErrors.submit && 
+                                <div className="error-message submit-error">{formErrors.submit}</div>}
+
+                            <button 
+                                type="submit" 
+                                className="submit-btn"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? (
+                                    <ClipLoader color="#fff" size={20} />
+                                ) : (
+                                    <>
+                                        <FaSave /> Update Profile
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </>
+                )}
             </div>
 
             <style jsx>{`
@@ -319,6 +342,27 @@ function UpdateProfile() {
                     justify-content: center;
                     align-items: center;
                     height: 100vh;
+                }
+                
+                .success-message {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    padding: 2rem 1rem;
+                    color: #28a745;
+                }
+                
+                .success-message h2 {
+                    margin: 1rem 0;
+                    color: #28a745;
+                    font-size: 1.8rem;
+                }
+                
+                .success-message p {
+                    color: #6c757d;
+                    font-size: 1rem;
                 }
             `}</style>
         </div>
