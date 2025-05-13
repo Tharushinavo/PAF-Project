@@ -1,50 +1,80 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaUtensils, FaListAlt, FaUserCircle } from "react-icons/fa"; 
+import { FaUserCircle, FaUtensils, FaListAlt } from "react-icons/fa";
+
 const Navbar = () => {
   return (
     <nav style={navStyle}>
       <ul style={navListStyle}>
         <li style={navItemStyle}>
+          <Link to="/userProfile" style={navLinkStyle}>
+            <div className="nav-box">
+              <FaUserCircle style={iconStyle} />
+              Back to Profile
+            </div>
+          </Link>
+        </li>
+        <li style={navItemStyle}>
           <Link to="/meal-planner" style={navLinkStyle}>
-            <div style={navBoxStyle}>
+            <div className="nav-box">
               <FaUtensils style={iconStyle} />
-              <span>Meal Planner</span>
+              Meal Planner
             </div>
           </Link>
         </li>
         <li style={navItemStyle}>
           <Link to="/all-meal-plans" style={navLinkStyle}>
-            <div style={navBoxStyle}>
+            <div className="nav-box">
               <FaListAlt style={iconStyle} />
-              <span>All Meal Plans</span>
-            </div>
-          </Link>
-        </li>
-        <li style={navItemStyle}>
-          <Link to="/userProfile" style={navLinkStyle}>
-            <div style={navBoxStyle}>
-              <FaUserCircle style={iconStyle} />
-              <span>Back to Profile</span>
+              All Meal Plans
             </div>
           </Link>
         </li>
       </ul>
+
+      {/* Injecting global styles for hover effects */}
+      <style>{`
+        .nav-box {
+          background: rgba(255, 255, 255, 0.15);
+          color: #fff;
+          font-size: 18px;
+          font-weight: 600;
+          padding: 15px;
+          border-radius: 12px;
+          width: 80%;
+          text-align: center;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          justify-content: center;
+        }
+
+        .nav-box:hover {
+          background: rgba(255, 255, 255, 0.25);
+          transform: scale(1.05);
+        }
+      `}</style>
     </nav>
   );
 };
 
-
+// Sidebar nav styling
 const navStyle = {
   position: "fixed",
   left: 0,
   top: 0,
   height: "100vh",
-  width: "240px",
-  background: "#333",
+  width: "220px",
+  background: "rgba(0, 0, 0, 0.4)",
+  backdropFilter: "blur(12px)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  boxShadow: "4px 0 10px rgba(0, 0, 0, 0.3)",
   zIndex: 1000,
 };
 
@@ -56,10 +86,10 @@ const navListStyle = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  gap: "20px", // Gap between nav items
 };
 
 const navItemStyle = {
-  marginBottom: "20px",
   width: "100%",
   textAlign: "center",
 };
@@ -71,26 +101,10 @@ const navLinkStyle = {
   justifyContent: "center",
 };
 
-const navBoxStyle = {
-  background: "#444",
-  color: "white",
-  fontSize: "18px",
-  fontWeight: "bold",
-  padding: "12px",
-  borderRadius: "10px",
-  width: "80%",
-  textAlign: "center",
-  transition: "0.3s",
-  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "10px",
-};
-
 const iconStyle = {
-  fontSize: "20px",
+  fontSize: "22px",
+  marginRight: "6px",
+  verticalAlign: "middle",
 };
 
 export default Navbar;

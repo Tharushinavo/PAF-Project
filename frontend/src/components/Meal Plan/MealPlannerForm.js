@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import MealPlanService from '../../services/MealPlanService';
+import MealPlanService from "../../services/MealPlanService";
 import { FaSave, FaTimes } from "react-icons/fa";
-import { ClipLoader } from 'react-spinners';
+import { ClipLoader } from "react-spinners";
 
-
-const MEAL_BG = "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=1200&q=80"; // Example: healthy meal flatlay
+const MEAL_BG =
+  "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=1200&q=80";
 
 const MealPlannerForm = () => {
   const { dayOfWeek: selectedDay } = useParams();
@@ -21,13 +21,20 @@ const MealPlannerForm = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // Success message state
 
   useEffect(() => {
     const fetchMealPlan = async () => {
       try {
         const response = await MealPlanService.getMealPlanByDay(selectedDay);
         if (response) {
-          setMeals(response.meals);
+          setMeals({
+            breakfast: response.breakfast || "",
+            snacks: response.snacks || "",
+            lunch: response.lunch || "",
+            dinner: response.dinner || "",
+          });
           setIsEditing(true);
         }
       } catch (error) {
@@ -38,40 +45,60 @@ const MealPlannerForm = () => {
     if (selectedDay) fetchMealPlan();
   }, [selectedDay]);
 
+  
+  // Optional: Hide success alert after 2 seconds
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(""), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   const handleChange = (event) => {
     setMeals({ ...meals, [event.target.name]: event.target.value.trimStart() });
     setErrors({ ...errors, [event.target.name]: "" });
+    if (errorMessage) setErrorMessage("");
+    if (successMessage) setSuccessMessage("");
   };
 
   const validateForm = () => {
     const newErrors = {};
-    Object.keys(meals).forEach((meal) => {
-      if (!meals[meal].trim()) {
-        newErrors[meal] = `${meal.charAt(0).toUpperCase() + meal.slice(1)} cannot be empty.`;
-      }
-    });
+    let isValid = true;
+
+    if (!meals.breakfast.trim()) {
+      newErrors.breakfast = "Breakfast cannot be empty.";
+      isValid = false;
+    }
+    if (!meals.lunch.trim()) {
+      newErrors.lunch = "Lunch cannot be empty.";
+      isValid = false;
+    }
+    if (!meals.dinner.trim()) {
+      newErrors.dinner = "Dinner cannot be empty.";
+      isValid = false;
+    }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return isValid;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
 
     if (!validateForm()) return;
 
     setLoading(true);
 
     try {
-   
       const requestData = {
         dayOfWeek: selectedDay,
-        breakfast: meals.breakfast,
-        snacks: meals.snacks,
-        lunch: meals.lunch,
-        dinner: meals.dinner,
+        breakfast: meals.breakfast.trim() || "Not specified",
+        snacks: meals.snacks.trim() || "Not specified",
+        lunch: meals.lunch.trim() || "Not specified",
+        dinner: meals.dinner.trim() || "Not specified",
       };
-    
 
       if (isEditing) {
         await MealPlanService.updateMealPlan(selectedDay, requestData);
@@ -79,11 +106,16 @@ const MealPlannerForm = () => {
         await MealPlanService.createMealPlan(requestData);
       }
 
-      alert("Meal plan saved successfully!");
-      navigate("/all-meal-plans");
+      setSuccessMessage("Meal plan saved successfully!");
+
+      // Redirect after 1.2 seconds
+      setTimeout(() => {
+        navigate("/all-meal-plans");
+      }, 1200);
     } catch (error) {
-      console.error("Error saving meal plan:", error);
-      alert("Failed to save meal plan. Please try again.");
+      setErrorMessage(
+        error.message || "Failed to save meal plan. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -94,10 +126,17 @@ const MealPlannerForm = () => {
       <div style={overlayStyle} />
       <div style={containerStyle}>
         <h1>Meal Planner for {selectedDay}</h1>
+
+        {/* Alerts */}
+        {errorMessage && <div style={alertStyle}>{errorMessage}</div>}
+        {successMessage && <div style={successAlertStyle}>{successMessage}</div>}
+
         <form onSubmit={handleSubmit} style={formStyle}>
           {Object.keys(meals).map((meal, index) => (
             <div key={index} style={formGroupStyle}>
-              <label style={labelStyle}>{meal.charAt(0).toUpperCase() + meal.slice(1)}</label>
+              <label style={labelStyle}>
+                {meal.charAt(0).toUpperCase() + meal.slice(1)}
+              </label>
               <input
                 type="text"
                 name={meal}
@@ -119,7 +158,12 @@ const MealPlannerForm = () => {
               )}
               {loading ? "Saving..." : "Save Meal Plan"}
             </button>
-            <button type="button" onClick={() => navigate("/meal-planner")} style={buttonStyleSecondary}>
+            <button
+              type="button"
+              onClick={() => navigate("/meal-planner")}
+              style={buttonStyleSecondary}
+              disabled={loading}
+            >
               <FaTimes style={iconStyle} />
               Close
             </button>
@@ -149,7 +193,7 @@ const overlayStyle = {
   left: 0,
   right: 0,
   bottom: 0,
-  background: "rgba(0,0,0,0.35)", // semi-transparent overlay for readability
+  background: "rgba(0,0,0,0.35)",
   zIndex: 0,
 };
 
@@ -199,6 +243,26 @@ const errorStyle = {
   marginTop: "5px",
 };
 
+const alertStyle = {
+  backgroundColor: "#f8d7da",
+  color: "#721c24",
+  padding: "12px",
+  marginBottom: "20px",
+  borderRadius: "5px",
+  textAlign: "center",
+  border: "1px solid #f5c6cb",
+};
+
+const successAlertStyle = {
+  backgroundColor: "#d4edda",
+  color: "#155724",
+  padding: "12px",
+  marginBottom: "20px",
+  borderRadius: "5px",
+  textAlign: "center",
+  border: "1px solid #c3e6cb",
+};
+
 const buttonContainerStyle = {
   display: "flex",
   justifyContent: "center",
@@ -221,7 +285,7 @@ const buttonStyle = {
   justifyContent: "center",
 };
 
-const buttonStyleSecondary = {    
+const buttonStyleSecondary = {
   ...buttonStyle,
   backgroundColor: "#f44336",
 };

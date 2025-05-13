@@ -279,4 +279,4 @@ const cancelButtonStyle = {
   cursor: "pointer",
 };
 
-export default MealPlannerPage;
+export default MealPlannerPage

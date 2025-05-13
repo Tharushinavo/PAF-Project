@@ -1,4 +1,4 @@
-import { FaUserPlus, FaSignInAlt } from 'react-icons/fa';
+import { FaUserPlus } from 'react-icons/fa';
 
 // import { useNavigate } from 'react-router-dom';
 
@@ -19,21 +19,14 @@ function Home() {
             onClick={() => (window.location.href = '/register')}
             style={{ ...styles.button, ...styles.registerButton }}
             aria-label="Register"
+            className="home-btn"
           >
             <FaUserPlus style={styles.icon} /> Register
-          </button>
-          <button
-            // onClick={() => navigate('/login')}
-            onClick={() => (window.location.href = '/login')}
-            style={{ ...styles.button, ...styles.loginButton }}
-            aria-label="Login"
-          >
-            <FaSignInAlt style={styles.icon} /> Login
           </button>
         </div>
         <p style={styles.footerText}>
           Already have an account?{' '}
-          <a href="/login" style={styles.link}>Login here</a>
+          <a href="/login" style={styles.link} className="home-link">Login here</a>
         </p>
       </div>
       {/* Inline CSS for hover/active effects */}
@@ -121,9 +114,6 @@ const styles = {
   registerButton: {
     backgroundColor: '#FF7043',
     marginBottom: '5px',
-  },
-  loginButton: {
-    backgroundColor: '#FF7043',
   },
   icon: {
     marginRight: '10px',
