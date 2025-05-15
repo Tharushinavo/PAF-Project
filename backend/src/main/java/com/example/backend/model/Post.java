@@ -1,22 +1,37 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.util.List;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-    private String ownerUsername; // NEW: Owner of the post
+    private String username;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private String imageUrl; // or path
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes;
+    private String review;
+
+    private String location;
+
+    private String tags;
+
+    private double rating;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private int likesCount;
+
 }
