@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { FaEnvelope, FaLock, FaSignInAlt, FaEye, FaEyeSlash } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaEnvelope, FaLock, FaSignInAlt, FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaTwitter } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
 
 function Login() {
@@ -10,7 +10,25 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
+    const [oauthLoading, setOauthLoading] = useState(false);
 
+    // Check for OAuth redirects and handle params
+    useEffect(() => {
+        // Get URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        const token = params.get('token');
+        const userId = params.get('userId');
+
+        // Handle OAuth callback data
+        if (error) {
+            setSubmitError(error);
+        } else if (token && userId) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('userId', userId);
+            window.location.href = "/userProfile";
+        }
+    }, []);
     
     const validate = () => {
         const errs = {};
@@ -30,6 +48,7 @@ function Login() {
             const response = await axios.post('http://localhost:8080/user/login', { email, password });
             if (response.data.id) {
                 localStorage.setItem('userId', response.data.id);
+                localStorage.setItem('token', response.data.token);
                 window.location.href = "/userProfile";
             } else {
                 setSubmitError('Invalid credentials');
@@ -39,6 +58,11 @@ function Login() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSocialLogin = (provider) => {
+        setOauthLoading(provider);
+        window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
     };
 
     //styles
@@ -101,6 +125,23 @@ function Login() {
         transition: 'background-color 0.3s'
     };
 
+    const socialButtonStyle = (color) => ({
+        padding: '12px 0',
+        borderRadius: '6px',
+        backgroundColor: color,
+        color: 'white',
+        border: 'none',
+        fontSize: '16px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        marginTop: '10px',
+        fontWeight: 600,
+        transition: 'background-color 0.3s'
+    });
+
     const labelStyle = {
         display: 'flex',
         alignItems: 'center',
@@ -125,6 +166,24 @@ function Login() {
         border: 'none',
         color: '#888',
         cursor: 'pointer'
+    };
+
+    const dividerStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '20px 0',
+        color: '#666'
+    };
+
+    const lineStyle = {
+        flex: 1,
+        height: '1px',
+        backgroundColor: '#ddd'
+    };
+
+    const textDividerStyle = {
+        padding: '0 10px',
+        fontSize: '14px'
     };
 
     return (
@@ -176,6 +235,39 @@ function Login() {
 
                 <button type="submit" style={buttonStyle} disabled={loading}>
                     {loading ? <ClipLoader color="#fff" size={22} /> : <><FaSignInAlt /> Login</>}
+                </button>
+
+                <div style={dividerStyle}>
+                    <div style={lineStyle}></div>
+                    <span style={textDividerStyle}>OR</span>
+                    <div style={lineStyle}></div>
+                </div>
+
+                <button 
+                    type="button" 
+                    style={socialButtonStyle('#DB4437')}
+                    onClick={() => handleSocialLogin('google')}
+                    disabled={oauthLoading}
+                >
+                    {oauthLoading === 'google' ? <ClipLoader color="#fff" size={20} /> : <><FaGoogle /> Continue with Google</>}
+                </button>
+
+                <button 
+                    type="button" 
+                    style={socialButtonStyle('#4267B2')}
+                    onClick={() => handleSocialLogin('facebook')}
+                    disabled={oauthLoading}
+                >
+                    {oauthLoading === 'facebook' ? <ClipLoader color="#fff" size={20} /> : <><FaFacebook /> Continue with Facebook</>}
+                </button>
+
+                <button 
+                    type="button" 
+                    style={socialButtonStyle('#1DA1F2')}
+                    onClick={() => handleSocialLogin('twitter')}
+                    disabled={oauthLoading}
+                >
+                    {oauthLoading === 'twitter' ? <ClipLoader color="#fff" size={20} /> : <><FaTwitter /> Continue with Twitter</>}
                 </button>
             </form>
         </div>
