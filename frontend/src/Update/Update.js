@@ -19,7 +19,6 @@ function Update() {
     service: '',
     atmosphere: '',
   });
-<div className="update-container"> ... </div>
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -31,7 +30,7 @@ function Update() {
           id: postData.id || '',
           title: postData.title || '',
           content: postData.content || '',
-          imageUrl: '', // Don't prefill file input
+          imageUrl: '',
           tags: postData.tags || '',
           location: postData.location || '',
           rating: postData.rating || '',
@@ -74,10 +73,8 @@ function Update() {
       atmosphere: formData.atmosphere,
     };
 
-    // ✅ Send 'post' as a JSON Blob
     data.append('post', new Blob([JSON.stringify(postPayload)], { type: 'application/json' }));
 
-    // ✅ Include image if selected
     if (formData.imageUrl && typeof formData.imageUrl !== 'string') {
       data.append('file', formData.imageUrl);
     }
@@ -96,58 +93,56 @@ function Update() {
   };
 
   return (
-    <div>
-      <h2>Update Post</h2>
-      <form onSubmit={onSubmit}>
-        <label>Post ID (readonly)</label><br />
-        <input type="text" name="id" value={formData.id} readOnly /><br />
+    <div className="update-container">
+      <div className="update-card">
+        <h2>Update Post</h2>
+        <form onSubmit={onSubmit}>
+          <label>Post ID (readonly)</label>
+          <input type="text" name="id" value={formData.id} readOnly />
 
-        <label>Title</label><br />
-        <input type="text" name="title" value={formData.title} onChange={onInputChange} required /><br />
+          <label>Title</label>
+          <input type="text" name="title" value={formData.title} onChange={onInputChange} required />
 
-        <label>Content</label><br />
-        <input type="text" name="content" value={formData.content} onChange={onInputChange} required /><br />
+          <label>Content</label>
+          <input type="text" name="content" value={formData.content} onChange={onInputChange} required />
 
-        <label>Tags</label><br />
-        <input type="text" name="tags" value={formData.tags} onChange={onInputChange} required /><br />
+          <label>Tags</label>
+          <input type="text" name="tags" value={formData.tags} onChange={onInputChange} required />
 
-        <label>Location</label><br />
-        <input type="text" name="location" value={formData.location} onChange={onInputChange} required /><br />
+          <label>Location</label>
+          <input type="text" name="location" value={formData.location} onChange={onInputChange} required />
 
-        <label>Rating</label><br />
-        <select name="rating" value={formData.rating} onChange={onInputChange} required>
-          <option value="" disabled>Select rating</option>
-          <option value="1 out of 5">1 out of 5</option>
-          <option value="2 out of 5">2 out of 5</option>
-          <option value="3 out of 5">3 out of 5</option>
-          <option value="4 out of 5">4 out of 5</option>
-          <option value="5 out of 5">5 out of 5</option>
-        </select><br />
+          <label>Rating</label>
+          <select name="rating" value={formData.rating} onChange={onInputChange} required>
+            <option value="" disabled>Select rating</option>
+            <option value="1 out of 5">1 out of 5</option>
+            <option value="2 out of 5">2 out of 5</option>
+            <option value="3 out of 5">3 out of 5</option>
+            <option value="4 out of 5">4 out of 5</option>
+            <option value="5 out of 5">5 out of 5</option>
+          </select>
 
-        <label>Restaurant Description</label><br />
-        <input type="text" name="restaurantDescription" value={formData.restaurantDescription} onChange={onInputChange} required /><br />
+          <label>Restaurant Description</label>
+          <input type="text" name="restaurantDescription" value={formData.restaurantDescription} onChange={onInputChange} required />
 
-        <label>Food Quality</label><br />
-        <input type="text" name="foodQuality" value={formData.foodQuality} onChange={onInputChange} required /><br />
+          <label>Food Quality</label>
+          <input type="text" name="foodQuality" value={formData.foodQuality} onChange={onInputChange} required />
 
-        <label>Service</label><br />
-        <input type="text" name="service" value={formData.service} onChange={onInputChange} required /><br />
+          <label>Service</label>
+          <input type="text" name="service" value={formData.service} onChange={onInputChange} required />
 
-        <label>Atmosphere</label><br />
-        <input type="text" name="atmosphere" value={formData.atmosphere} onChange={onInputChange} required /><br />
+          <label>Atmosphere</label>
+          <input type="text" name="atmosphere" value={formData.atmosphere} onChange={onInputChange} required />
 
-        <label>Image (optional)</label><br />
-        <input
-          type="file"
-          name="imageUrl"
-          accept="image/*"
-          onChange={onInputChange}
-        /><br /><br />
+          <label>Image (optional)</label>
+          <input type="file" name="imageUrl" accept="image/*" onChange={onInputChange} />
 
-        <button type="submit">Update Post</button>
-      </form>
+          <button type="submit">Update Post</button>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default Update;
+
